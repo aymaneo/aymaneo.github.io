@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<BaseLayout title="Blog">
+  <Header />
+  <main class="pt-20 pb-28 px-6">
+    <div class="max-w-wide mx-auto">
+      <h1 class="font-heading text-5xl md:text-6xl font-bold tracking-tight">Blog</h1>
+      <p class="mt-4 text-text-secondary text-lg max-w-content">
+        Writing about AI, software engineering, and the systems that connect them.
+      </p>
+
+      <div class="mt-10 border-t border-border">
+        {
+          posts.map((post) => (
+            <BlogCard
+              title={post.data.title}
+              description={post.data.description}
+              date={post.data.date}
+              slug={post.slug}
+            />
+          ))
+        }
+      </div>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

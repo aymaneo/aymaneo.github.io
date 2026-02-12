@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import Footer from '../components/Footer.astro';
+
+const libraries = [
+  {
+    title: 'LLM Agent Framework',
+    description:
+      'A lightweight framework for building reliable, autonomous AI agents with tool use, memory, and planning capabilities. Built with a focus on observability and debugging.',
+    tags: ['Python', 'LLMs', 'Agents', 'OpenAI'],
+    github: 'https://github.com/aymaneo/llm-agent-framework',
+  },
+  {
+    title: 'Neural Search Engine',
+    description:
+      'Semantic search engine powered by transformer embeddings. Supports multi-modal queries across text and images with sub-100ms latency at scale.',
+    tags: ['Rust', 'Transformers', 'FAISS', 'gRPC'],
+    github: 'https://github.com/aymaneo/neural-search',
+  },
+  {
+    title: 'ML Pipeline Orchestrator',
+    description:
+      'Kubernetes-native ML pipeline orchestration tool. Declarative YAML configs, automatic resource scaling, and built-in experiment tracking.',
+    tags: ['Go', 'Kubernetes', 'MLOps', 'Docker'],
+    github: 'https://github.com/aymaneo/ml-orchestrator',
+  },
+];
+
+const tools = [
+  {
+    title: 'Attention Visualizer',
+    description:
+      'Interactive visualization tool for exploring attention patterns in transformer models. Supports GPT, BERT, and custom architectures.',
+    tags: ['TypeScript', 'React', 'D3.js', 'PyTorch'],
+    github: 'https://github.com/aymaneo/attention-viz',
+    href: '#',
+  },
+  {
+    title: 'Distributed Training Toolkit',
+    description:
+      'Simplified distributed training for PyTorch models. Handles data parallelism, gradient synchronization, and fault tolerance across GPU clusters.',
+    tags: ['Python', 'PyTorch', 'NCCL', 'Distributed Systems'],
+    github: 'https://github.com/aymaneo/dist-train',
+  },
+  {
+    title: 'Code Review AI',
+    description:
+      'AI-powered code review assistant that provides contextual suggestions, detects bugs, and ensures code quality standards across pull requests.',
+    tags: ['Python', 'LLMs', 'GitHub API', 'AST'],
+    github: 'https://github.com/aymaneo/code-review-ai',
+  },
+];
+---
+
+<BaseLayout title="Projects">
+  <Header />
+  <main class="pt-20 pb-28 px-6">
+    <div class="max-w-wide mx-auto">
+      <h1 class="font-heading text-5xl md:text-6xl font-bold tracking-tight">Projects</h1>
+      <p class="mt-4 text-text-secondary text-lg max-w-content">
+        Open-source libraries, tools, and systems at the intersection of AI and
+        software engineering.
+      </p>
+
+      <!-- Libraries -->
+      <section class="mt-16">
+        <h2 class="font-heading text-2xl font-bold tracking-tight mb-4">Open-Source Libraries</h2>
+        <div class="border-t border-border">
+          {
+            libraries.map((project) => (
+              <ProjectCard {...project} />
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- Tools -->
+      <section class="mt-16">
+        <h2 class="font-heading text-2xl font-bold tracking-tight mb-4">Tools & Applications</h2>
+        <div class="border-t border-border">
+          {
+            tools.map((project) => (
+              <ProjectCard {...project} />
+            ))
+          }
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>

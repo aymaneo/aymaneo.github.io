@@ -1,0 +1,79 @@
+---
+const pathname = Astro.url.pathname;
+const links = [
+  { href: '/', label: 'About' },
+  { href: '/projects', label: 'Projects' },
+  { href: '/blog', label: 'Blog' },
+];
+---
+
+<header class="sticky top-0 z-50">
+  <div class="max-w-4xl mx-auto px-4 mt-3 sm:mt-4">
+    <nav class="bg-[var(--color-header-bg)] backdrop-blur-md border border-border rounded-xl px-5 py-3 flex items-center justify-between sm:justify-center">
+      <!-- Desktop nav -->
+      <div class="hidden sm:flex items-center gap-8">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class={`text-sm transition-colors duration-200 ${
+                pathname === link.href
+                  ? 'text-text font-medium'
+                  : 'text-text-tertiary hover:text-text'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+
+      <!-- Mobile: logo + toggle -->
+      <a href="/" class="sm:hidden font-heading text-sm font-semibold text-text">Aymane</a>
+      <button
+        id="mobile-toggle"
+        class="sm:hidden text-text-secondary hover:text-text transition-colors"
+        aria-label="Toggle menu"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div
+      id="mobile-menu"
+      class="hidden sm:hidden bg-[var(--color-header-bg)] backdrop-blur-md border border-t-0 border-border rounded-b-xl -mt-1 mx-px"
+    >
+      <div class="px-5 py-3 flex flex-col gap-1.5">
+        {
+          links.map((link) => (
+            <a
+              href={link.href}
+              class={`text-sm py-1.5 transition-colors duration-200 ${
+                pathname === link.href
+                  ? 'text-text font-medium'
+                  : 'text-text-tertiary hover:text-text'
+              }`}
+            >
+              {link.label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('mobile-toggle')?.addEventListener('click', () => {
+      document.getElementById('mobile-menu')?.classList.toggle('hidden');
+    });
+  });
+</script>

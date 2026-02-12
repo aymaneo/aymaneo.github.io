@@ -1,0 +1,167 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 5);
+
+const projects = [
+  {
+    title: 'LLM Agent Framework',
+    description:
+      'A lightweight framework for building reliable, autonomous AI agents with tool use, memory, and planning capabilities.',
+    tags: ['Python', 'LLMs', 'Agents'],
+    github: 'https://github.com/aymaneo/llm-agent-framework',
+  },
+  {
+    title: 'Neural Search Engine',
+    description:
+      'Semantic search powered by transformer embeddings. Multi-modal queries across text and images with sub-100ms latency.',
+    tags: ['Rust', 'Transformers', 'FAISS'],
+    github: 'https://github.com/aymaneo/neural-search',
+  },
+  {
+    title: 'ML Pipeline Orchestrator',
+    description:
+      'Kubernetes-native ML pipeline orchestration. Declarative configs, auto-scaling, and built-in experiment tracking.',
+    tags: ['Go', 'Kubernetes', 'MLOps'],
+    github: 'https://github.com/aymaneo/ml-orchestrator',
+  },
+  {
+    title: 'Attention Visualizer',
+    description:
+      'Interactive visualization for exploring attention patterns in transformer models. Supports GPT, BERT, and custom architectures.',
+    tags: ['TypeScript', 'React', 'D3.js'],
+    github: 'https://github.com/aymaneo/attention-viz',
+  },
+];
+---
+
+<BaseLayout title="Portfolio">
+  <Header />
+  <main class="px-6 pt-16 pb-28">
+    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row gap-16 lg:gap-20">
+
+      <!-- Left: content feed -->
+      <div class="flex-1 min-w-0 order-2 lg:order-1">
+
+        <!-- Recent Posts -->
+        <section>
+          <h2 class="font-heading text-lg font-semibold tracking-tight mb-6">Recent Posts</h2>
+          <div class="space-y-10">
+            {
+              posts.map((post) => {
+                const date = post.data.date.toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                });
+                return (
+                  <a href={`/blog/${post.slug}`} class="group block">
+                    <div class="flex items-baseline gap-4 mb-2">
+                      <time class="text-sm font-mono text-accent tabular-nums">{date}</time>
+                      {post.data.tags?.[0] && (
+                        <span class="text-sm text-accent">{post.data.tags[0]}</span>
+                      )}
+                    </div>
+                    <h3 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight leading-tight group-hover:text-accent transition-colors duration-200">
+                      {post.data.title}
+                    </h3>
+                    <p class="mt-2 text-text-secondary leading-relaxed">
+                      {post.data.description}
+                    </p>
+                  </a>
+                );
+              })
+            }
+          </div>
+          <a
+            href="/blog"
+            class="inline-block mt-8 text-sm text-text-tertiary hover:text-text transition-colors duration-200"
+          >
+            All posts &rarr;
+          </a>
+        </section>
+
+        <!-- Projects -->
+        <section class="mt-20">
+          <h2 class="font-heading text-lg font-semibold tracking-tight mb-6">Projects</h2>
+          <div class="space-y-8">
+            {
+              projects.map((project) => (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener"
+                  class="group block"
+                >
+                  <h3 class="font-heading text-xl font-semibold tracking-tight group-hover:text-accent transition-colors duration-200">
+                    {project.title}
+                  </h3>
+                  <p class="mt-1 text-sm text-text-secondary leading-relaxed">
+                    {project.description}
+                  </p>
+                  <div class="mt-2 flex flex-wrap gap-1.5">
+                    {project.tags.map((tag, i) => (
+                      <span class="text-xs text-text-tertiary">
+                        {tag}{i < project.tags.length - 1 && <span class="ml-1.5">·</span>}
+                      </span>
+                    ))}
+                  </div>
+                </a>
+              ))
+            }
+          </div>
+          <a
+            href="/projects"
+            class="inline-block mt-8 text-sm text-text-tertiary hover:text-text transition-colors duration-200"
+          >
+            All projects &rarr;
+          </a>
+        </section>
+      </div>
+
+      <!-- Right: sticky identity sidebar -->
+      <aside class="lg:w-72 shrink-0 order-1 lg:order-2 lg:sticky lg:top-24 lg:self-start">
+        <h1 class="font-heading text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95]">
+          Latent<br />Space
+        </h1>
+
+        <div class="mt-6 flex items-center gap-4">
+          <a
+            href="https://github.com/aymaneo"
+            target="_blank"
+            rel="noopener"
+            class="text-text-tertiary hover:text-text transition-colors duration-200"
+            aria-label="GitHub"
+          >
+            <svg class="w-[18px] h-[18px]" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"></path>
+            </svg>
+          </a>
+          <a
+            href="https://x.com/aymaneo_ai"
+            target="_blank"
+            rel="noopener"
+            class="text-text-tertiary hover:text-text transition-colors duration-200"
+            aria-label="X"
+          >
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+            </svg>
+          </a>
+          <span class="text-sm text-text-secondary ml-1">by Aymane</span>
+        </div>
+
+        <p class="mt-5 text-sm text-text-secondary leading-relaxed">
+          AI & Software Engineer. Building intelligent systems at the intersection of machine learning and software engineering.
+        </p>
+      </aside>
+
+    </div>
+  </main>
+  <Footer />
+</BaseLayout>
