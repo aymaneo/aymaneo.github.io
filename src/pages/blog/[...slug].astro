@@ -13,6 +13,11 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+
+if (post.data.external_url) {
+  return Astro.redirect(post.data.external_url);
+}
+
 const { Content } = await post.render();
 const formattedDate = post.data.date.toLocaleDateString('en-US', {
   year: 'numeric',

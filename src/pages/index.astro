@@ -5,39 +5,9 @@ import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
+  .filter((p) => !p.data.draft)
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 5);
-
-const projects = [
-  {
-    title: 'LLM Agent Framework',
-    description:
-      'A lightweight framework for building reliable, autonomous AI agents with tool use, memory, and planning capabilities.',
-    tags: ['Python', 'LLMs', 'Agents'],
-    github: 'https://github.com/aymaneo/llm-agent-framework',
-  },
-  {
-    title: 'Neural Search Engine',
-    description:
-      'Semantic search powered by transformer embeddings. Multi-modal queries across text and images with sub-100ms latency.',
-    tags: ['Rust', 'Transformers', 'FAISS'],
-    github: 'https://github.com/aymaneo/neural-search',
-  },
-  {
-    title: 'ML Pipeline Orchestrator',
-    description:
-      'Kubernetes-native ML pipeline orchestration. Declarative configs, auto-scaling, and built-in experiment tracking.',
-    tags: ['Go', 'Kubernetes', 'MLOps'],
-    github: 'https://github.com/aymaneo/ml-orchestrator',
-  },
-  {
-    title: 'Attention Visualizer',
-    description:
-      'Interactive visualization for exploring attention patterns in transformer models. Supports GPT, BERT, and custom architectures.',
-    tags: ['TypeScript', 'React', 'D3.js'],
-    github: 'https://github.com/aymaneo/attention-viz',
-  },
-];
 ---
 
 <BaseLayout title="Portfolio">
@@ -47,8 +17,6 @@ const projects = [
 
       <!-- Left: content feed -->
       <div class="flex-1 min-w-0 order-2 lg:order-1">
-
-        <!-- Recent Posts -->
         <section>
           <h2 class="font-heading text-lg font-semibold tracking-tight mb-6">Recent Posts</h2>
           <div class="space-y-10">
@@ -59,8 +27,14 @@ const projects = [
                   month: 'short',
                   day: 'numeric',
                 });
+                const href = post.data.external_url ?? `/blog/${post.slug}`;
+                const isExternal = !!post.data.external_url;
                 return (
-                  <a href={`/blog/${post.slug}`} class="group block">
+                  <a
+                    href={href}
+                    {...isExternal ? { target: '_blank', rel: 'noopener' } : {}}
+                    class="group block"
+                  >
                     <div class="flex items-baseline gap-4 mb-2">
                       <time class="text-sm font-mono text-accent tabular-nums">{date}</time>
                       {post.data.tags?.[0] && (
@@ -68,7 +42,7 @@ const projects = [
                       )}
                     </div>
                     <h3 class="font-heading text-2xl sm:text-3xl font-bold tracking-tight leading-tight group-hover:text-accent transition-colors duration-200">
-                      {post.data.title}
+                      {post.data.title}{isExternal && <span class="ml-2 text-text-tertiary text-lg">↗</span>}
                     </h3>
                     <p class="mt-2 text-text-secondary leading-relaxed">
                       {post.data.description}
@@ -83,43 +57,6 @@ const projects = [
             class="inline-block mt-8 text-sm text-text-tertiary hover:text-text transition-colors duration-200"
           >
             All posts &rarr;
-          </a>
-        </section>
-
-        <!-- Projects -->
-        <section class="mt-20">
-          <h2 class="font-heading text-lg font-semibold tracking-tight mb-6">Projects</h2>
-          <div class="space-y-8">
-            {
-              projects.map((project) => (
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener"
-                  class="group block"
-                >
-                  <h3 class="font-heading text-xl font-semibold tracking-tight group-hover:text-accent transition-colors duration-200">
-                    {project.title}
-                  </h3>
-                  <p class="mt-1 text-sm text-text-secondary leading-relaxed">
-                    {project.description}
-                  </p>
-                  <div class="mt-2 flex flex-wrap gap-1.5">
-                    {project.tags.map((tag, i) => (
-                      <span class="text-xs text-text-tertiary">
-                        {tag}{i < project.tags.length - 1 && <span class="ml-1.5">·</span>}
-                      </span>
-                    ))}
-                  </div>
-                </a>
-              ))
-            }
-          </div>
-          <a
-            href="/projects"
-            class="inline-block mt-8 text-sm text-text-tertiary hover:text-text transition-colors duration-200"
-          >
-            All projects &rarr;
           </a>
         </section>
       </div>
@@ -143,7 +80,7 @@ const projects = [
             </svg>
           </a>
           <a
-            href="https://x.com/aymaneo_ai"
+            href="https://x.com/thelatent_space"
             target="_blank"
             rel="noopener"
             class="text-text-tertiary hover:text-text transition-colors duration-200"
@@ -153,11 +90,11 @@ const projects = [
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
             </svg>
           </a>
-          <span class="text-sm text-text-secondary ml-1">by Aymane</span>
+          <span class="text-sm text-text-secondary ml-1">by aymaneo</span>
         </div>
 
         <p class="mt-5 text-sm text-text-secondary leading-relaxed">
-          AI & Software Engineer. Building intelligent systems at the intersection of machine learning and software engineering.
+          ML engineer working on evals, post-training, and RL.
         </p>
       </aside>
 
